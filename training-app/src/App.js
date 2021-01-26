@@ -1,4 +1,5 @@
 // // -- Name Tag Non-Hooks App --
+// import React from 'react'
 // import "./App.scss";
 // import NameTag from './components/nameTag';
 
@@ -23,7 +24,7 @@
 //       color: "green"
 //     }
 //   }
-  
+
 //   const newProps = {
 //     ...props, ...addGreen
 //   }
@@ -55,39 +56,39 @@
 //   );
 // }
 
-// -- Name Tag Hooks App --
-import React, {useState} from 'react'
-import "./App.scss";
-import NameTag from './components/nameTag';
+// // -- Name Tag Hooks App --
+// import React, {useState} from 'react'
+// import "./App.scss";
+// import NameTag from './components/nameTag';
 
-const initialNames = [
-  {firstName:"Peter", lastName:"Smith"},
-  {firstName:"John", lastName:"Smith"},
-  {firstName:"Jill", lastName:"Smith"},
-  {firstName:"Mary", lastName:"Smith"}
-]
+// const initialNames = [
+//   {firstName:"Peter", lastName:"Smith"},
+//   {firstName:"John", lastName:"Smith"},
+//   {firstName:"Jill", lastName:"Smith"},
+//   {firstName:"Mary", lastName:"Smith"}
+// ]
 
-function App() {
-  const [names, setNames] = useState(initialNames);
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1 className="name, title">Names List</h1>
-        {
-          names.map( (v,i) => {
-            return <NameTag key={`${i}${v.firstName}${v.lastName}`} firstName={v.firstName} lastName={v.lastName}></NameTag>
-          })
-        }
+// function App() {
+//   const [names, setNames] = useState(initialNames);
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h1 className="name, title">Names List</h1>
+//         {
+//           names.map( (v,i) => {
+//             return <NameTag key={`${i}${v.firstName}${v.lastName}`} firstName={v.firstName} lastName={v.lastName}></NameTag>
+//           })
+//         }
 
-        {/* <NameTag firstName={names[0].firstName} lastName={names[0].lastName}></NameTag>
-        <NameTag firstName={names[1].firstName} lastName={names[1].lastName}></NameTag>
-        <NameTag firstName={names[2].firstName} lastName={names[2].lastName}></NameTag> */}
-      </header>
-    </div>
-  );
-}
+//         {/* <NameTag firstName={names[0].firstName} lastName={names[0].lastName}></NameTag>
+//         <NameTag firstName={names[1].firstName} lastName={names[1].lastName}></NameTag>
+//         <NameTag firstName={names[2].firstName} lastName={names[2].lastName}></NameTag> */}
+//       </header>
+//     </div>
+//   );
+// }
 
-// // -- Age Hook App -- 
+// // -- Age Hook App --
 // import React, {useState} from 'react'
 // import "./App.scss";
 
@@ -111,5 +112,69 @@ function App() {
 //     </div>
 //   );
 // }
+
+// -- Grocery List App --
+import React, { useState } from "react";
+import "./App.scss";
+import Item from "./components/item";
+
+const initList = [
+  { name: "Tomato", calories: 20 },
+  { name: "Rice", calories: 30 },
+  { name: "Candy", calories: 100 },
+];
+
+function App() {
+  const [list, setList] = useState(initList);
+  const [editable, setEditable] = useState(false);
+
+  function removeUnhealthyHandle() {
+    const filteredList = list.filter((v) => v.calories < 50);
+    setList(filteredList);
+  }
+
+  function removeItemHandle(e) {
+    const filteredList = list.filter((v) => v.name !== e.target.name);
+    setList(filteredList);
+  }
+
+  function makeEditableHandle() {
+    setEditable(true);
+  }
+
+  function keyPressHandle(e, i) {
+    if(e.key === "Enter") {
+      setEditable(!editable);
+
+      const copyList = [...list]
+      copyList[i].name = e.target.value;
+    }
+  }
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h2>Grocery List</h2>
+        {list.map((v, k) => {
+          return (
+            <Item
+              key={`${k}${v.name}${v.calories}`}
+              item={v}
+              editable={editable}
+              onClick={removeItemHandle}
+              onDoubleClick={makeEditableHandle}
+              onKeyPress={keyPressHandle}
+              index={k}
+            ></Item>
+          );
+        })}
+
+        <button className="remove-button" onClick={removeUnhealthyHandle}>
+          Remove Unhealthy
+        </button>
+      </header>
+    </div>
+  );
+}
 
 export default App;
