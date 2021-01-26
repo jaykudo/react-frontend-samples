@@ -1,6 +1,5 @@
 import "./App.scss";
 import NameTag from './components/nameTag';
-import NameTagChildren from './components/nameTagChildren'
 
 const nameStyle = {
   color: "gray",
@@ -16,15 +15,40 @@ const nameTagTitle = {
   borderStyle: "dotted"
 }
 
+// -- Higher Order Components --
+const makeGreen = BaseComponent => props => {
+  const addGreen = {
+    style: {
+      color: "green"
+    }
+  }
+  
+  const newProps = {
+    ...props, ...addGreen
+  }
+
+  return <BaseComponent {...newProps} />
+}
+
+const removeInline = BaseComponent => props => {
+  const newProps = {...props};
+  delete newProps.style;
+  return <BaseComponent></BaseComponent>
+}
+
+const GreenNameTag = makeGreen(NameTag);
+const CleanNameTag = removeInline(NameTag);
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         {/* Spread operator for JSX attributes */}
         <h1 style={{...nameStyle,...nameTagTitle}}>Names List</h1>
-        <NameTag name="Peter"></NameTag>
-        <NameTag name="John"></NameTag>
-        <NameTagChildren>Jill</NameTagChildren>
+        <GreenNameTag firstName="Peter" lastName="Smith"></GreenNameTag>
+        <CleanNameTag firstName="John" lastName="Smith"></CleanNameTag>
+        <NameTag firstName="Jill" lastName="Smith"></NameTag>
+        <NameTag></NameTag>
       </header>
     </div>
   );
