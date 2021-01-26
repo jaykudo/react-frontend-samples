@@ -60,3 +60,11 @@ $color: #282c34;
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.form-field {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  justify-content: space-between;
+  width: 300px;
+}
