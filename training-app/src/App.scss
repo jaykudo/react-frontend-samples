@@ -68,3 +68,25 @@ $color: #282c34;
   justify-content: space-between;
   width: 300px;
 }
+
+.Link-active-style { 
+  color: "green";
+  text-decoration: none;
+}
+
+.ul-style {
+  display: flex;
+  flex-direction: row;
+}
+
+.li-style {
+  width: 200px;
+  list-style-type: none;
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+.button {
+  width: 100px;
+  padding: 5px;
+}

@@ -191,7 +191,7 @@
 //   function handleNameChange(e) {
 //     setName(e.target.value);
 //   }
-  
+
 //   function handleIncomeChange(e) {
 //     setIncome(e.target.value);
 //   }
@@ -382,7 +382,6 @@
 //   );
 // }
 
-
 // // -- Use Clock useEffect App --
 // import React, {useState, useEffect} from "react";
 // import "./App.scss";
@@ -418,7 +417,7 @@
 //   Otherwise, the listeners will keep stacking up. */
 //   useEffect(()=>{
 //     window.addEventListener("mousemove", mouseMoveHandle);
-    
+
 //     return() => {
 //       window.removeEventListener("mousemove", mouseMoveHandle);
 //     }
@@ -483,7 +482,7 @@
 //     setI(i + 1);
 //   }
 
-//   /* Memo will only update when whatever is 
+//   /* Memo will only update when whatever is
 //   passed into the array changes. */
 //   const memoChild = useMemo(() => {
 //     return <Child></Child>
@@ -577,33 +576,172 @@
 //   );
 // }
 
-//-- useCustomFetch App --
-import React, {useState} from "react";
+// //-- useCustomFetch App --
+// import React, {useState} from "react";
+// import "./App.scss";
+// import useCustomFetch from './hooks/useCustomFetch'
+
+// function App() {
+//   const [url, setUrl] = useState('');
+//   const [data, loading, error] = useCustomFetch(url);
+
+//   function getFollowers(e) {
+//     if(e.key === 'Enter') {
+//       setUrl("https://api.github.com/users/" + e.target.value);
+//     }
+//   }
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         GitID:
+//         <input onKeyPress={getFollowers}></input>
+
+//         {loading && url && <div>Loading ...</div>}
+//         {!loading && data && data.rData && data.rData.followers
+//         && (<div>Followers: {data.rData.followers}</div>)}
+//         {error && <div>Error: {error}</div>}
+//       </header>
+//     </div>
+//   );
+// }
+
+// //-- useCustomFetch App --
+// import React, {useState} from "react";
+// import "./App.scss";
+// import useCustomFetch from './hooks/useCustomFetch'
+
+// function App() {
+//   const [url, setUrl] = useState('');
+//   const [data, loading, error] = useCustomFetch(url);
+
+//   function getFollowers(e) {
+//     if(e.key === 'Enter') {
+//       setUrl("https://api.github.com/users/" + e.target.value);
+//     }
+//   }
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         GitID:
+//         <input onKeyPress={getFollowers}></input>
+
+//         {loading && url && <div>Loading ...</div>}
+//         {!loading && data && data.rData && data.rData.followers
+//         && (<div>Followers: {data.rData.followers}</div>)}
+//         {error && <div>Error: {error}</div>}
+//       </header>
+//     </div>
+//   );
+// }
+
+//-- Router App --
+import React, { useState } from "react";
+import {
+  BrowserRouter,
+  Route,
+  Link,
+  NavLink,
+  Redirect,
+  Prompt,
+} from "react-router-dom";
 import "./App.scss";
-import useCustomFetch from './hooks/useCustomFetch'
+import AboutPage from "./pages/AboutPage";
+import HomePage from "./pages/HomePage"
+import messageContext from "./contexts/messageContext";
 
 function App() {
-  const [url, setUrl] = useState('');
-  const [data, loading, error] = useCustomFetch(url);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [age, setAge] = useState(null);
+  const [message, setMessage] = useState("I am being Shared");
 
-  function getFollowers(e) {
-    if(e.key === 'Enter') {
-      setUrl("https://api.github.com/users/" + e.target.value);
-    }
+  function onClickHandle() {
+    setLoggedIn(!loggedIn);
+  }
+
+  function onChangeHandle(e) {
+    setAge(e.target.value);
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        GitID:
-        <input onKeyPress={getFollowers}></input>
+    <BrowserRouter>
+      <messageContext.Provider value={[message, setMessage]}>
+        <div className="App">
+          <header className="App-header">
+            <ul className="ul-style">
+              <li className="li-style">
+                <NavLink
+                  className="App-link"
+                  to="/"
+                  exact
+                  activeClassName="Link-active-style"
+                >
+                  Home
+                </NavLink>
+              </li>
+              <li className="li-style">
+                <NavLink
+                  className="App-link"
+                  to="/about"
+                  exact
+                  activeClassName="Link-active-style"
+                >
+                  About Page
+                </NavLink>
+              </li>
+              <li className="li-style">
+                <NavLink
+                  className="App-link"
+                  to="user/john/doe"
+                  exact
+                  active-style={{ color: "green" }}
+                >
+                  User John Doe
+                </NavLink>
+              </li>
+            </ul>
 
-        {loading && url && <div>Loading ...</div>}
-        {!loading && data && data.rData && data.rData.followers 
-        && (<div>Followers: {data.rData.followers}</div>)}
-        {error && <div>Error: {error}</div>}
-      </header>
-    </div>
+            <Prompt
+              when={loggedIn && !age}
+              message={(location) => {
+                return location.pathname.startsWith("/user")
+                  ? true
+                  : "Are you sure?";
+              }}
+            ></Prompt>
+            <button onClick={onClickHandle}>
+              {loggedIn ? "Logged In" : "Logged Out"}
+            </button>
+            <Route
+              path="/"
+              exact
+              component={HomePage}
+            />
+            <Route path="/about" exact component={AboutPage} />
+            <Route
+              path="/user/:firstname/:lastname"
+              exact
+              render={({ match }) => {
+                return loggedIn ? (
+                  <h1>
+                    <h2>Age: {age}</h2>
+                    <input
+                      type="text"
+                      value={age}
+                      onChange={onChangeHandle}
+                    ></input>
+                    Welcome {match.params.firstname} {match.params.lastname}
+                  </h1>
+                ) : (
+                  <Redirect to="/" />
+                );
+              }}
+            />
+          </header>
+        </div>
+      </messageContext.Provider>
+    </BrowserRouter>
   );
 }
 
