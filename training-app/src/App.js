@@ -636,113 +636,230 @@
 //   );
 // }
 
-//-- Router App --
-import React, { useState } from "react";
-import {
-  BrowserRouter,
-  Route,
-  Link,
-  NavLink,
-  Redirect,
-  Prompt,
-} from "react-router-dom";
-import "./App.scss";
-import AboutPage from "./pages/AboutPage";
-import HomePage from "./pages/HomePage"
-import messageContext from "./contexts/messageContext";
+// //-- Router App --
+// import React, { useState } from "react";
+// import {
+//   BrowserRouter,
+//   Route,
+//   Link,
+//   NavLink,
+//   Redirect,
+//   Prompt,
+// } from "react-router-dom";
+// import "./App.scss";
+// import AboutPage from "./pages/AboutPage";
+// import HomePage from "./pages/HomePage"
+// import messageContext from "./contexts/messageContext";
 
-function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [age, setAge] = useState(null);
-  const [message, setMessage] = useState("I am being Shared");
+// function App() {
+//   const [loggedIn, setLoggedIn] = useState(false);
+//   const [age, setAge] = useState(null);
+//   const [message, setMessage] = useState("I am being Shared");
 
-  function onClickHandle() {
-    setLoggedIn(!loggedIn);
-  }
+//   function onClickHandle() {
+//     setLoggedIn(!loggedIn);
+//   }
 
-  function onChangeHandle(e) {
-    setAge(e.target.value);
-  }
+//   function onChangeHandle(e) {
+//     setAge(e.target.value);
+//   }
 
-  return (
-    <BrowserRouter>
-      <messageContext.Provider value={[message, setMessage]}>
-        <div className="App">
-          <header className="App-header">
-            <ul className="ul-style">
-              <li className="li-style">
-                <NavLink
-                  className="App-link"
-                  to="/"
-                  exact
-                  activeClassName="Link-active-style"
-                >
-                  Home
-                </NavLink>
-              </li>
-              <li className="li-style">
-                <NavLink
-                  className="App-link"
-                  to="/about"
-                  exact
-                  activeClassName="Link-active-style"
-                >
-                  About Page
-                </NavLink>
-              </li>
-              <li className="li-style">
-                <NavLink
-                  className="App-link"
-                  to="user/john/doe"
-                  exact
-                  active-style={{ color: "green" }}
-                >
-                  User John Doe
-                </NavLink>
-              </li>
-            </ul>
+//   return (
+//     <BrowserRouter>
+//       <messageContext.Provider value={[message, setMessage]}>
+//         <div className="App">
+//           <header className="App-header">
+//             <ul className="ul-style">
+//               <li className="li-style">
+//                 <NavLink
+//                   className="App-link"
+//                   to="/"
+//                   exact
+//                   activeClassName="Link-active-style"
+//                 >
+//                   Home
+//                 </NavLink>
+//               </li>
+//               <li className="li-style">
+//                 <NavLink
+//                   className="App-link"
+//                   to="/about"
+//                   exact
+//                   activeClassName="Link-active-style"
+//                 >
+//                   About Page
+//                 </NavLink>
+//               </li>
+//               <li className="li-style">
+//                 <NavLink
+//                   className="App-link"
+//                   to="user/john/doe"
+//                   exact
+//                   active-style={{ color: "green" }}
+//                 >
+//                   User John Doe
+//                 </NavLink>
+//               </li>
+//             </ul>
 
-            <Prompt
-              when={loggedIn && !age}
-              message={(location) => {
-                return location.pathname.startsWith("/user")
-                  ? true
-                  : "Are you sure?";
-              }}
-            ></Prompt>
-            <button onClick={onClickHandle}>
-              {loggedIn ? "Logged In" : "Logged Out"}
-            </button>
-            <Route
-              path="/"
-              exact
-              component={HomePage}
-            />
-            <Route path="/about" exact component={AboutPage} />
-            <Route
-              path="/user/:firstname/:lastname"
-              exact
-              render={({ match }) => {
-                return loggedIn ? (
-                  <h1>
-                    <h2>Age: {age}</h2>
-                    <input
-                      type="text"
-                      value={age}
-                      onChange={onChangeHandle}
-                    ></input>
-                    Welcome {match.params.firstname} {match.params.lastname}
-                  </h1>
-                ) : (
-                  <Redirect to="/" />
-                );
-              }}
-            />
-          </header>
-        </div>
-      </messageContext.Provider>
-    </BrowserRouter>
-  );
-}
+//             <Prompt
+//               when={loggedIn && !age}
+//               message={(location) => {
+//                 return location.pathname.startsWith("/user")
+//                   ? true
+//                   : "Are you sure?";
+//               }}
+//             ></Prompt>
+//             <button onClick={onClickHandle}>
+//               {loggedIn ? "Logged In" : "Logged Out"}
+//             </button>
+//             <Route
+//               path="/"
+//               exact
+//               component={HomePage}
+//             />
+//             <Route path="/about" exact component={AboutPage} />
+//             <Route
+//               path="/user/:firstname/:lastname"
+//               exact
+//               render={({ match }) => {
+//                 return loggedIn ? (
+//                   <h1>
+//                     <h2>Age: {age}</h2>
+//                     <input
+//                       type="text"
+//                       value={age}
+//                       onChange={onChangeHandle}
+//                     ></input>
+//                     Welcome {match.params.firstname} {match.params.lastname}
+//                   </h1>
+//                 ) : (
+//                   <Redirect to="/" />
+//                 );
+//               }}
+//             />
+//           </header>
+//         </div>
+//       </messageContext.Provider>
+//     </BrowserRouter>
+//   );
+// }
+
+// //-- Redux App --
+// import React from "react";
+// import {
+//   BrowserRouter,
+//   Route,
+//   NavLink
+// } from "react-router-dom";
+// import "./App.scss";
+// import HomePage from "./pages/HomePage"
+// import DepositPage from "./pages/DepositPage";
+// import WithdrawPage from "./pages/WithdrawPage";
+
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <div className="App">
+//         <header className="App-header">
+//           <ul className="ul-style">
+//             <li className="li-style">
+//               <NavLink to="/" className="App-link">Home</NavLink>
+//             </li>
+//             <li className="li-style">
+//               <NavLink to="/deposit" className="App-link">Deposit</NavLink>
+//             </li>
+//             <li className="li-style">
+//               <NavLink to="/withdraw" className="App-link">Withdraw</NavLink>
+//             </li>
+//           </ul>
+//           <Route path="/" exact component={HomePage}/>
+//           <Route path="/deposit" exact component={DepositPage} />
+//           <Route path="/withdraw" exact component={WithdrawPage} />
+//         </header>
+//       </div>
+//     </BrowserRouter>
+//   );
+// }
+
+// //-- UseReducer App: Used for local state vs Redux --
+// import React, {useReducer} from "react";
+// import "./App.scss";
+
+// const initState = {
+//   count:0
+// }
+
+// function reducerFunction(state, action) {
+//   switch(action.type) {
+//     case "INCREMENT":
+//       return {count: state.count + 1}
+//     case "DECREMENT":
+//       return {count: state.count - 1}
+//     default:
+//       return state;
+//   }
+
+// }
+
+// function App() {
+//   const [state, dispatch] = useReducer(reducerFunction,  initState);
+
+//   function plusOneHandle() {
+//     dispatch({type: "INCREMENT"});
+//   }
+  
+//   function minusOneHandle() {
+//     dispatch({type: "DECREMENT"});
+//   }
+
+//   return (
+//       <div className="App">
+//         <header className="App-header">
+//           <h2>useReducer Example</h2>
+//           <h3>Count: {state.count}</h3>
+//           <button onClick={plusOneHandle}>Plus One</button>
+//           <button onClick={minusOneHandle}>Minus One</button>
+//         </header>
+//       </div>
+//   );
+// }
+
+// //-- Mobx App: Used for local state vs Redux --
+// import React from "react";
+// import "./App.scss";
+// import {observer, useObserver} from 'mobx-react-lite'
+
+// const App = observer(() => {
+//   const store = useObserver({
+//     count: 1,
+//     addOne() {
+//       store.count++;
+//     },
+//     subtractOne() {
+//       store.count--;
+//     }
+//   });
+
+//   function addOneHandle() {
+//     store.addOne();
+//   }
+
+//   function subtractOneHandle() {
+//     store.subtractOne();
+//   }
+
+//   return (
+//       <div className="App">
+//         <header className="App-header">
+//           <h2>useReducer Example</h2>
+//           <h3>Count: {store.count}</h3>
+//           <button onClick={addOneHandle}>Add One</button>
+//           <button onClick={subtractOneHandle}>Subtract One</button>
+//         </header>
+//       </div>
+//   );
+// })
+
 
 export default App;
