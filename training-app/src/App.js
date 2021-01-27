@@ -278,51 +278,330 @@
 //   );
 // }
 
-// -- Use Forwarded Ref App --
-import React, {useEffect, useRef} from "react";
-import Input from './components/Input'
-import "./App.scss";
+// // -- Use Forwarded Ref App --
+// import React, {useEffect, useRef} from "react";
+// import Input from './components/Input'
+// import "./App.scss";
 
-const inputStyle = {
-  width: "400px",
-  height: "40px",
-  fontSize: "30px",
-  marginBottom: "10px"
-}
+// const inputStyle = {
+//   width: "400px",
+//   height: "40px",
+//   fontSize: "30px",
+//   marginBottom: "10px"
+// }
+
+// function App() {
+//   const firstNameRef = useRef(null);
+//   const lastNameRef = useRef(null);
+
+//   useEffect(() => {
+//     firstNameRef.current.focus();
+//   }, [])
+
+//   function firstNameKeyDown(e) {
+//     if(e.key === "Enter") {
+//       lastNameRef.current.focus();
+//     }
+//   }
+
+//   function lastNameKeyDown(e) {
+
+//   }
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <Input
+//           ref={firstNameRef}
+//           placeholder="Type first name here"
+//           style={inputStyle}
+//           onKeyDown={firstNameKeyDown}
+//         ></Input>
+//         <Input
+//           ref={lastNameRef}
+//           placeholder="Type first name here"
+//           style={inputStyle}
+//           onKeyDown={lastNameKeyDown}
+//         ></Input>
+//       </header>
+//     </div>
+//   );
+// }
+
+// // -- Use Lifecycle useEffect App --
+// import React, {useState, useEffect} from "react";
+// import "./App.scss";
+
+// let born = false;
+
+// function App() {
+//   const [growth, setGrowth] = useState(0);
+//   const [nirvana, setNirvana] = useState(false);
+
+//   {/* Will run on birth of component due to [] */}
+//   useEffect(() => {
+//     console.log('I am born');
+//   }, [])
+
+//   {/* Will run on every refresh */}
+//   useEffect(() => {
+//     if (born) {
+//       console.log('Make mistake and learn');
+//     }
+//     else {
+//       born = true;
+//     }
+
+//     if(growth > 70) {
+//       setNirvana(true);
+//     }
+
+//     return function cleanup() {
+//       console.log('cleanup after mistakes');
+//     }
+//   })
+
+//   useEffect(() => {
+//     if (born) {
+//       document.title = "Nirvana attained";
+//     }
+//   },[nirvana])
+
+//   function growthHandle() {
+//     setGrowth(growth + 10);
+//   }
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h2>Use Effect</h2>
+//         <h3>growth:{growth}</h3>
+//         <button onClick={growthHandle}>learn and grow</button>
+//       </header>
+//     </div>
+//   );
+// }
+
+
+// // -- Use Clock useEffect App --
+// import React, {useState, useEffect} from "react";
+// import "./App.scss";
+
+// const initXY = {
+//   x:null,
+//   y:null
+// }
+
+// function App() {
+//   const [time, setTime] = useState(Date);
+//   const [xy, setXY] = useState(initXY);
+
+//   useEffect(() => {
+//     let handle = setInterval(() => {
+//       setTime(Date)
+//     }, 3000);
+
+//     return() => {
+//       clearInterval(handle);
+//     }
+//   })
+
+//   function mouseMoveHandle(e) {
+//     setXY({
+//       x: e.clientX,
+//       y: e.clientY
+//     })
+//   }
+
+//   /* When useEffect is using an event listener, it needs to be cleaned up.
+//   Use either an empty array in the second argument or return cleanup function.
+//   Otherwise, the listeners will keep stacking up. */
+//   useEffect(()=>{
+//     window.addEventListener("mousemove", mouseMoveHandle);
+    
+//     return() => {
+//       window.removeEventListener("mousemove", mouseMoveHandle);
+//     }
+//   })
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h2>Use Effect Examples</h2>
+//         <h3>Date & Time:{time}</h3>
+//         <h3>{`x:${xy.x}, y:${xy.y}`}</h3>
+//       </header>
+//     </div>
+//   );
+// }
+
+// // -- Use Aync API useEffect App --
+// import React, {useEffect, useState} from "react";
+// import "./App.scss";
+
+// const initProfile = {
+//   followers: null,
+//   publicRepos: null
+// }
+
+// function App() {
+//   const[profile, setProfile] = useState(initProfile);
+
+//   async function getProfile() {
+//     const response = await fetch('https://api.github.com/users/jaykudo');
+//     const json = await response.json();
+
+//     setProfile({
+//       followers: json.followers,
+//       publicRepos: json.public_repos
+//     })
+//   }
+
+//   useEffect(() => {
+//     getProfile();
+//   },[])
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h2>Fetch Data</h2>
+//         <h3>{`Followers: ${profile.followers}, Repos: ${profile.publicRepos}`}</h3>
+//       </header>
+//     </div>
+//   );
+// }
+
+// // -- Use useMemo App --
+// import React, {useState, useMemo} from "react";
+// import Child from './components/child';
+// import "./App.scss";
+
+// function App() {
+//   const[i, setI] = useState(0);
+
+//   function onClickHandle(){
+//     setI(i + 1);
+//   }
+
+//   /* Memo will only update when whatever is 
+//   passed into the array changes. */
+//   const memoChild = useMemo(() => {
+//     return <Child></Child>
+//   },[i])
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h3>Use Memo</h3>
+//         <h2>i: {i}</h2>
+//         <button onClick={onClickHandle}>Increment I</button>
+//         <h3>Normal Render</h3>
+//         <Child></Child>
+//         <h3>Memo Render</h3>
+//         {memoChild}
+//       </header>
+//     </div>
+//   );
+// }
+
+// // -- UsePrevious App --
+// import React, {useState} from "react";
+// import "./App.scss";
+// import usePrevious from './hooks/usePrevious'
+
+// function App() {
+//   const[age, setAge] = useState(21);
+//   const previousAge = usePrevious(age);
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h2>Current Age: {age}</h2>
+//         <h2>Previous Age: {previousAge}</h2>
+//         <button onClick={() => setAge(age-1)}>Make Me Younger</button>
+//       </header>
+//     </div>
+//   );
+// }
+
+// // -- useLayoutEffect App --
+// import React, {useState, useRef, useLayoutEffect} from "react";
+// import "./App.scss";
+
+// function useDim(el, val) {
+//   const [height, setHeight] = useState(0);
+//   const [width, setWidth] = useState(0);
+
+//   useLayoutEffect(() => {
+//     let boundingBox = el.current.getBoundingClientRect();
+//     setHeight(boundingBox.height);
+//     setWidth(boundingBox.width);
+//   }, [val])
+
+//   return {height, width};
+// }
+
+// function App() {
+//   const [val, setVal] = useState(2);
+//   const valEl = useRef(null);
+
+//   const {height, width} = useDim(valEl, val);
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h1>Height: {height}, Width: {width}</h1>
+//         <div ref={valEl}>{val}</div>
+//         <button onClick={() => setVal(val*10)}>10*</button>
+//       </header>
+//     </div>
+//   );
+// }
+
+// //-- useDebugValue App --
+// import React, {useState} from "react";
+// import "./App.scss";
+// import usePrevious from './hooks/usePrevious'
+
+// function App() {
+//   const[age, setAge] = useState(21);
+//   const previousAge = usePrevious(age);
+
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h2>Current Age: {age}</h2>
+//         <h2>Previous Age: {previousAge}</h2>
+//         <button onClick={() => setAge(age-1)}>Make Me Younger</button>
+//       </header>
+//     </div>
+//   );
+// }
+
+//-- useCustomFetch App --
+import React, {useState} from "react";
+import "./App.scss";
+import useCustomFetch from './hooks/useCustomFetch'
 
 function App() {
-  const firstNameRef = useRef(null);
-  const lastNameRef = useRef(null);
+  const [url, setUrl] = useState('');
+  const [data, loading, error] = useCustomFetch(url);
 
-  useEffect(() => {
-    firstNameRef.current.focus();
-  }, [])
-
-  function firstNameKeyDown(e) {
-    if(e.key === "Enter") {
-      lastNameRef.current.focus();
+  function getFollowers(e) {
+    if(e.key === 'Enter') {
+      setUrl("https://api.github.com/users/" + e.target.value);
     }
-  }
-
-  function lastNameKeyDown(e) {
-
   }
 
   return (
     <div className="App">
       <header className="App-header">
-        <Input
-          ref={firstNameRef}
-          placeholder="Type first name here"
-          style={inputStyle}
-          onKeyDown={firstNameKeyDown}
-        ></Input>
-        <Input
-          ref={lastNameRef}
-          placeholder="Type first name here"
-          style={inputStyle}
-          onKeyDown={lastNameKeyDown}
-        ></Input>
+        GitID:
+        <input onKeyPress={getFollowers}></input>
+
+        {loading && url && <div>Loading ...</div>}
+        {!loading && data && data.rData && data.rData.followers 
+        && (<div>Followers: {data.rData.followers}</div>)}
+        {error && <div>Error: {error}</div>}
       </header>
     </div>
   );
