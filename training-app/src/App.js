@@ -861,15 +861,31 @@
 //   );
 // })
 
+// //-- Unit Testing App --
+// import React from "react";
+// import "./App.scss";
+// import Button from './components/button/button'
+
+// function App() {
+//   return (
+//       <div className="App">
+//         <header className="App-header">
+//         </header>
+//       </div>
+//   );
+// }
+
 //-- Unit Testing App --
 import React from "react";
 import "./App.scss";
-import Button from './components/button/button'
+import CustomButton from "./components/custombutton/customButton";
 
 function App() {
   return (
       <div className="App">
         <header className="App-header">
+          <CustomButton type="primary">Click Me</CustomButton>
+          <CustomButton type="disabled">Click Me</CustomButton>
         </header>
       </div>
   );
