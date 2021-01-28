@@ -1,38 +1,44 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
 
-const initMatrix = [];
+const initList = [1,2,3,4,5,6];
+
 function App() {
-  const [matrix, setMatrix] = useState(initMatrix);
-  const [matriSize, setMatrixSize] = useState(3);
-  const [currentPlayer, setCurrentPlayer] = useState("o");
+  const [list, setList] = useState(initList);
+  const [draggedItem, setDraggedItem] = useState(null);
 
-  useEffect(()=> {
-    const row = new Array(matrixSize).fill(null);
+  function onDragStartHandle(e, index) {
+    setDraggedItem(list[index]);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData('text/html', e.target.parentNode);
+    e.dataTransfer.setDragImage(e.target.parentNode, 100, 20)
+  }
 
-    const tempMatrix = [];
+  function onDragOverHandle(index) {
+    const draggedOverItem = list[index];
 
-    for(let i=0; i<matrixSize; i++) {
-      tempMatrix.push([...row]);
+    if(draggedOverItem === draggedItem) {
+      return;
     }
 
-    setMatrix(tempMatrix);
-  }, [])
+    const items = list.filter(item => item !== draggedItem);
+    items.splice(index, 0, draggedItem);
+    setList(items);
+  }
 
   return (
     <div className="App">
       <header className="App-header">
-        <div>
+        <h3>Drag and Drop Project</h3>
+        <ul>
           {
-            matrix.map((val, c) => {
-              <div>
-                {val.map(() =>(
-                  <div>hi</div>
-                ))}
-              </div>
+            list.map((item, idx) =>{
+              return <li key={idx} onDragOver={() => onDragOverHandle(idx)} className="item-style">
+                <div draggable onDragStart={(e) => onDragStartHandle(e, idx)}>{item}</div>
+              </li>
             })
           }
-        </div>
+        </ul>
       </header>
     </div>
   );
