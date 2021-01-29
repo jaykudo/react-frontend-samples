@@ -21,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^11.2.3",
+    "flow-bin": "^0.143.1",
     "react-styleguidist": "^11.1.5",
     "react-test-render": "^1.1.2"
   }

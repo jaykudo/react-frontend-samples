@@ -875,17 +875,38 @@
 //   );
 // }
 
-//-- Unit Testing App --
+// //-- Unit Testing App --
+// import React from "react";
+// import "./App.scss";
+// import CustomButton from "./components/custombutton/customButton";
+
+// function App() {
+//   return (
+//       <div className="App">
+//         <header className="App-header">
+//           <CustomButton type="primary">Click Me</CustomButton>
+//           <CustomButton type="disabled">Click Me</CustomButton>
+//         </header>
+//       </div>
+//   );
+// }
+
+//-- Type Testing App --
 import React from "react";
 import "./App.scss";
-import CustomButton from "./components/custombutton/customButton";
+import MyCompPropTypes from "./components/mycompproptypes/MyCompPropTypes";
+import MyCompFlowTypes from "./components/mycompflowtypes/MyCompFlowTypes"
 
 function App() {
+  function onClickHandle() {
+    console.log('I am clicked');
+  }
+
   return (
       <div className="App">
         <header className="App-header">
-          <CustomButton type="primary">Click Me</CustomButton>
-          <CustomButton type="disabled">Click Me</CustomButton>
+          <MyCompPropTypes onClick={onClickHandle} str={1}></MyCompPropTypes>
+          <MyCompFlowTypes name="peter"></MyCompFlowTypes>
         </header>
       </div>
   );
